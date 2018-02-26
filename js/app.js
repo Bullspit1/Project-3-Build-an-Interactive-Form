@@ -7,6 +7,7 @@ const shirtDesign = document.getElementById('design');
 const shirtColor = document.getElementById('color');
 
 const activities = document.getElementsByClassName('activities')[0];
+const totalH3Tag = document.getElementById('total');
 
 window.addEventListener("load", function(){
   nameInput.focus(); // After the page loads the name input is focused
@@ -65,19 +66,36 @@ shirtDesign.addEventListener('change', function(e){
 }
 
 
-
+//TODO Dry Code this as well as rest of code to make more dev friendly
 activities.addEventListener('change', function(e){
   // console.log(e.target);
   const activitieCheckBox = activities.children;
+  // let totalArr = [];
+  let total = 0;
   // console.log(activitieCheckBox);
   // console.log(e.target.checked);
     // console.log(activitieCheckBox[i].cheZZZ);
+
+    // for(let v = 1; v < activitieCheckBox.length - 1; v++){
+    //   console.log(typeof Number(activitieCheckBox[v].firstElementChild.value));
+    // }
+
+    // for (var i = 1; i < activitieCheckBox.length - 1; i++) {
+    //   total += Number(e.target.value);
+    // }
     if(e.target.checked){
-      console.log('Checked');
-      // if(){
-      //
-      // }
-      // console.log(e.target.name);
+      // console.log('Checked');
+      // console.log(e.target.value);
+      // totalArr.push(Number(e.target.value));
+      for(var i = 1; i < activitieCheckBox.length - 1; i++){
+        // console.log(activitieCheckBox[i].firstElementChild.value);
+        // console.log(activitieCheckBox[i].firstElementChild.checked);
+        if(activitieCheckBox[i].firstElementChild.checked){
+          total += parseInt(activitieCheckBox[i].firstElementChild.value);
+        }
+      }
+
+
       if(e.target.name === 'js-frameworks'){
         // console.log(activitieCheckBox[4]);
         activitieCheckBox[4].firstElementChild.disabled = true;
@@ -93,9 +111,18 @@ activities.addEventListener('change', function(e){
         activitieCheckBox[3].style.color = '#596D75';
       }
     } else {
-      console.log('Unchecked');
+      // console.log('Unchecked');
+
+
+      for(var i = 1; i < activitieCheckBox.length - 1; i++){
+        // console.log(activitieCheckBox[i].firstElementChild.value);
+        // console.log(activitieCheckBox[i].firstElementChild.checked);
+        if(activitieCheckBox[i].firstElementChild.checked){
+          total += parseInt(activitieCheckBox[i].firstElementChild.value);
+        }
+      }
+
       if(e.target.name === 'js-frameworks'){
-        // console.log(activitieCheckBox[4]);
         activitieCheckBox[4].firstElementChild.disabled = false;
         activitieCheckBox[4].style.color = '#000';
       } else if (e.target.name === 'js-libs'){
@@ -116,6 +143,9 @@ activities.addEventListener('change', function(e){
     //   activitieCheckBox[i].style.color = '#000';
     // }
   }
+  totalH3Tag.innerHTML = 'Total: ' + total;
+
+  console.log(total);
 });
 
 //if checked add anount price to an array and add all together to get total
