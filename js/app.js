@@ -1,4 +1,5 @@
 const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('mail');
 
 const title = document.getElementById('title');
 const otherOption = document.getElementById('other-title');
@@ -8,6 +9,13 @@ const shirtColor = document.getElementById('color');
 
 const activities = document.getElementsByClassName('activities')[0];
 const totalH3Tag = document.getElementById('total');
+
+const payment = document.getElementById('payment');
+const creditCard = document.getElementById('credit-card');
+const payPal = creditCard.nextSibling.nextSibling;
+const bitCoin = payPal.nextSibling.nextSibling;
+
+const form = document.getElementsByTagName('form')[0];
 
 window.addEventListener("load", function(){
   nameInput.focus(); // After the page loads the name input is focused
@@ -68,9 +76,7 @@ shirtDesign.addEventListener('change', function(e){
 
 //TODO Dry Code this as well as rest of code to make more dev friendly
 activities.addEventListener('change', function(e){
-  // console.log(e.target);
   const activitieCheckBox = activities.children;
-  // let totalArr = [];
   let total = 0;
   // console.log(activitieCheckBox);
   // console.log(e.target.checked);
@@ -145,10 +151,62 @@ activities.addEventListener('change', function(e){
   }
   totalH3Tag.innerHTML = 'Total: ' + total;
 
-  console.log(total);
+  // console.log(total);
 });
 
-//if checked add anount price to an array and add all together to get total
+/*-------------------Payment Info Selection------------------*/
+// console.log(payPal);
+payment.value = 'credit card';
+payPal.style.display = 'none';
+bitCoin.style.display = 'none';
 
+payment.addEventListener('change', function(e){
+  // console.log(this.value);
+  if(this.value === 'credit card'){
+    creditCard.style.display = '';
+    payPal.style.display = 'none';
+    bitCoin.style.display = 'none';
+
+  } else if(this.value === 'paypal') {
+    creditCard.style.display = 'none';
+    payPal.style.display = '';
+    bitCoin.style.display = 'none';
+  } else if(this.value === 'bitcoin') {
+    creditCard.style.display = 'none';
+    payPal.style.display = 'none';
+    bitCoin.style.display = '';
+  } else {
+    creditCard.style.display = 'none';
+    payPal.style.display = 'none';
+    bitCoin.style.display = 'none';
+  }
+});
+
+// console.log(payment.parentNode);
+// console.log(payment.nextSibling.nextSibling);
+
+// console.log(form);
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  // console.log(e.target.lastElementChild);
+  if(e.target.lastElementChild){
+    // console.log(nameInput.value === '');
+    // console.log(emailInput.value.indexOf('@') > 1);
+    // console.log(emailInput.value.indexOf('.') <= emailInput.value.indexOf('@'));
+    console.log(emailInput.value.length - 1);
+    if(nameInput.value === ''){
+      // console.log(nameInput.previousSibling.previousSibling)
+      nameInput.previousSibling.previousSibling.style.color = 'red';
+    }
+
+    if(emailInput.value.indexOf('@') < 1 || emailInput.value.indexOf('.') <= emailInput.value.indexOf('@')){
+      emailInput.previousSibling.previousSibling.style.color = 'red';
+    }
+
+    // if() {
+    //   nameInput.previousSibling.previousSibling.style.color = '#000';
+    // }
+  }
+});
 
 });
