@@ -8,7 +8,7 @@ const shirtDesign = document.getElementById('design');
 const shirtColor = document.getElementById('color');
 
 const activities = document.getElementsByClassName('activities')[0];
-const totalH3Tag = document.getElementById('total');
+const activitieCheckBox = activities.children;
 
 const payment = document.getElementById('payment');
 const creditCard = document.getElementById('credit-card');
@@ -76,7 +76,6 @@ shirtDesign.addEventListener('change', function(e){
 
 //TODO Dry Code this as well as rest of code to make more dev friendly
 activities.addEventListener('change', function(e){
-  const activitieCheckBox = activities.children;
   let total = 0;
   // console.log(activitieCheckBox);
   // console.log(e.target.checked);
@@ -149,7 +148,8 @@ activities.addEventListener('change', function(e){
     //   activitieCheckBox[i].style.color = '#000';
     // }
   }
-  totalH3Tag.innerHTML = 'Total: ' + total;
+
+  activitieCheckBox[8].innerHTML = 'Total: ' + total;
 
   // console.log(total);
 });
@@ -187,26 +187,44 @@ payment.addEventListener('change', function(e){
 
 // console.log(form);
 form.addEventListener('submit', function(e){
+  const emailValid = /[\w.]+@\w+\.(net|com|edu|ca)/;
+  let isChecked = false;
+  // sdittawork@gmail.com
+  // s.dittawork@sympatico.ca
   e.preventDefault();
+  // console.log(emailValid.test(emailInput.value.toLowerCase()));
   // console.log(e.target.lastElementChild);
-  if(e.target.lastElementChild){
     // console.log(nameInput.value === '');
-    // console.log(emailInput.value.indexOf('@') > 1);
-    // console.log(emailInput.value.indexOf('.') <= emailInput.value.indexOf('@'));
-    console.log(emailInput.value.length - 1);
+    // console.log(emailInput.value.length - 1);
+    // console.log(nameInput);
     if(nameInput.value === ''){
       // console.log(nameInput.previousSibling.previousSibling)
       nameInput.previousSibling.previousSibling.style.color = 'red';
+      nameInput.style.border = '2px solid red';
     }
 
-    if(emailInput.value.indexOf('@') < 1 || emailInput.value.indexOf('.') <= emailInput.value.indexOf('@')){
+    // console.log(emailInput.value.indexOf('@') > 1);
+    // console.log(emailInput.value.indexOf('.') <= emailInput.value.indexOf('@'));
+
+    if(!emailValid.test(emailInput.value.toLowerCase())){
       emailInput.previousSibling.previousSibling.style.color = 'red';
+      emailInput.style.border = '2px solid red';
+    }
+    for (var i = 1; i < activitieCheckBox.length - 1; i++) {
+      // console.log(!activitieCheckBox[i].firstElementChild.checked || activitieCheckBox[i].firstElementChild.checked );
+      if(activitieCheckBox[i].firstElementChild.checked){
+        isChecked = true;
+      }
+      if(!isChecked){
+        // alert('more then one checked');
+        activitieCheckBox[0].style.color = 'red';
+        break;
+      }
     }
 
     // if() {
     //   nameInput.previousSibling.previousSibling.style.color = '#000';
     // }
-  }
 });
 
 });
