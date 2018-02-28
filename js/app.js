@@ -14,6 +14,9 @@ const payment = document.getElementById('payment');
 const creditCard = document.getElementById('credit-card');
 const payPal = creditCard.nextSibling.nextSibling;
 const bitCoin = payPal.nextSibling.nextSibling;
+const cardNumber = document.getElementById('cc-num');
+const zipCode = document.getElementById('zip');
+const cvv = document.getElementById('cvv');
 
 const form = document.getElementsByTagName('form')[0];
 
@@ -188,6 +191,7 @@ payment.addEventListener('change', function(e){
 // console.log(form);
 form.addEventListener('submit', function(e){
   const emailValid = /[\w.]+@\w+\.(net|com|edu|ca)/;
+  const numbsOnly = /[^0-9]+/;
   let isChecked = false;
   // sdittawork@gmail.com
   // s.dittawork@sympatico.ca
@@ -210,6 +214,11 @@ form.addEventListener('submit', function(e){
       emailInput.previousSibling.previousSibling.style.color = 'red';
       emailInput.style.border = '2px solid red';
     }
+
+    if(shirtDesign.value === 'Select Theme'){
+      shirtDesign.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.style.color = 'red';
+    }
+
     for (var i = 1; i < activitieCheckBox.length - 1; i++) {
       // console.log(!activitieCheckBox[i].firstElementChild.checked || activitieCheckBox[i].firstElementChild.checked );
       if(activitieCheckBox[i].firstElementChild.checked){
@@ -222,6 +231,26 @@ form.addEventListener('submit', function(e){
       }
     }
 
+    if(payment.value === 'credit card'){
+      // console.log(numbsOnly.test(cardNumber.value.toLowerCase()));
+      // console.log(cardNumber.value.length);
+      // console.log( cardNumber.value.legnth > 16 && cardNumber.value.length < 13);
+      // console.log(cardNumber.value.length < 13 || cardNumber.value.length > 16 ||cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase()));
+      if(cardNumber.value.length < 13 || cardNumber.value.length > 16 ||cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase())){
+        cardNumber.previousSibling.previousSibling.style.color = 'red';
+        cardNumber.style.border = '2px solid red';
+      }
+      if(zipCode.value.length > 5 || zipCode.value.length < 5 || zipCode.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
+        zipCode.previousSibling.previousSibling.style.color = 'red';
+        zipCode.style.border = '2px solid red';
+      }
+      if(cvv.value.length > 3 || cvv.value.length < 3 || cvv.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
+        cvv.previousSibling.previousSibling.style.color = 'red';
+        cvv.style.border = '2px solid red';
+      }
+    }
+
+//TODO Add a final conditional statement to deturmine if the errors were corrected...
     // if() {
     //   nameInput.previousSibling.previousSibling.style.color = '#000';
     // }
