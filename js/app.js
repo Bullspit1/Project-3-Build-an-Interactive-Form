@@ -20,11 +20,50 @@ const cvv = document.getElementById('cvv');
 
 const form = document.getElementsByTagName('form')[0];
 
+
+function shirtInfo(firstDesign, condition, i){
+  // console.log(i);
+    shirtColor.value = firstDesign;
+    if(condition){
+      shirtColor.options[i].style.display = '';
+    } else {
+      shirtColor.options[i].style.display = 'none';
+    }
+}
+
+function checkedAndUnchecked(selectionName, checkboxNumber, disabled, textColor){
+  // console.log(disabled);
+  if(selectionName === 'js-frameworks'){
+    activitieCheckBox[checkboxNumber[0]].firstElementChild.disabled = disabled;
+    activitieCheckBox[checkboxNumber[0]].style.color = textColor;
+  } else if (selectionName === 'js-libs'){
+    activitieCheckBox[checkboxNumber[1]].firstElementChild.disabled = disabled;
+    activitieCheckBox[checkboxNumber[1]].style.color = textColor;
+  } else if (selectionName === 'express'){
+    activitieCheckBox[checkboxNumber[2]].firstElementChild.disabled = disabled;
+    activitieCheckBox[checkboxNumber[2]].style.color = textColor;
+  } else if (selectionName === 'node'){
+    activitieCheckBox[checkboxNumber[3]].firstElementChild.disabled = disabled;
+    activitieCheckBox[checkboxNumber[3]].style.color = textColor;
+  }
+}
+
+function paymentInfo(display){
+  creditCard.style.display = display[0];
+  payPal.style.display = display[1];
+  bitCoin.style.display = display[2];
+}
+
+function errorColor(input, textColor, borderColor){
+  input.previousSibling.previousSibling.style.color = textColor;
+  input.style.border = borderColor;
+}
+
 window.addEventListener("load", function(){
   nameInput.focus(); // After the page loads the name input is focused
 
 /*-------------------Other Choise------------------*/
-    otherOption.style.display = 'none';
+  otherOption.style.display = 'none';
 title.addEventListener("change", function(){
   if(title.value === 'other'){
     otherOption.style.display = '';
@@ -33,227 +72,124 @@ title.addEventListener("change", function(){
   }
 });
 
-
 /*-------------------Shirt Choise------------------*/
 for(let i = 0; i < shirtColor.children.length; i++){
-  if(i < 1){
-    shirtColor.options[i].style.display = '';
-  } else {
-    shirtColor.options[i].style.display = 'none';
-  }
-
-shirtDesign.addEventListener('change', function(e){
-  // console.log(this.value);
-    if(this.value === 'js puns'){
-      // console.log(shirtColor);
-      // console.log(shirtColor.options[1].value = 'Cornflower Blue (JS Puns shirt only)');
-      shirtColor.value = 'cornflowerblue';
-      if(i >= 1 && i <= 3){
-        shirtColor.options[i].style.display = '';
-      } else {
-        shirtColor.options[i].style.display = 'none';
-        // console.log(shirtColor.children[i] + " Second");
-      }
-      // console.log(shirtColor.children.length);
-    }
-     else if(this.value === 'heart js'){
-      // console.log(shirtDesign.options);
-      shirtColor.value = 'tomato';
-      if(i > 3){
-        shirtColor.options[i].style.display = '';
-      } else {
-        shirtColor.options[i].style.display = 'none';
-      }
-    }
-    else {
-      shirtColor.value = 'choosedesign';
-     if(i < 1){
-       shirtColor.options[i].style.display = '';
-     } else {
-       shirtColor.options[i].style.display = 'none';
-     }
-    }
-  });
+  shirtInfo('choosedesign', i < 1, i);
+  // if(i < 1){
+  //   shirtColor.options[i].style.display = '';
+  // } else {
+  //   shirtColor.options[i].style.display = 'none';
+  // }
 }
 
+shirtDesign.addEventListener('change', function(e){
+  for(let i = 0; i < shirtColor.children.length; i++){
+    if(this.value === 'js puns'){
+      shirtInfo('cornflowerblue', i >= 1 && i <= 3, i);
+    }
+     else if(this.value === 'heart js'){
+       shirtInfo('tomato', i > 3, i);
+    }
+    else {
+      shirtInfo('choosedesign', i < 1, i);
+    }
+  }
+  });
 
-//TODO Dry Code this as well as rest of code to make more dev friendly
+/*-------------------Registration For Activities------------------*/
 activities.addEventListener('change', function(e){
   let total = 0;
-  // console.log(activitieCheckBox);
-  // console.log(e.target.checked);
-    // console.log(activitieCheckBox[i].cheZZZ);
 
-    // for(let v = 1; v < activitieCheckBox.length - 1; v++){
-    //   console.log(typeof Number(activitieCheckBox[v].firstElementChild.value));
-    // }
-
-    // for (var i = 1; i < activitieCheckBox.length - 1; i++) {
-    //   total += Number(e.target.value);
-    // }
+for(var i = 1; i < activitieCheckBox.length - 1; i++){
     if(e.target.checked){
-      // console.log('Checked');
-      // console.log(e.target.value);
-      // totalArr.push(Number(e.target.value));
-      for(var i = 1; i < activitieCheckBox.length - 1; i++){
-        // console.log(activitieCheckBox[i].firstElementChild.value);
-        // console.log(activitieCheckBox[i].firstElementChild.checked);
-        if(activitieCheckBox[i].firstElementChild.checked){
-          total += parseInt(activitieCheckBox[i].firstElementChild.value);
-        }
+      if(activitieCheckBox[i].firstElementChild.checked){
+        total += parseInt(activitieCheckBox[i].firstElementChild.value);
       }
-
-
-      if(e.target.name === 'js-frameworks'){
-        // console.log(activitieCheckBox[4]);
-        activitieCheckBox[4].firstElementChild.disabled = true;
-        activitieCheckBox[4].style.color = '#596D75';
-      } else if (e.target.name === 'js-libs'){
-        activitieCheckBox[5].firstElementChild.disabled = true;
-        activitieCheckBox[5].style.color = '#596D75';
-      } else if (e.target.name === 'express'){
-        activitieCheckBox[2].firstElementChild.disabled = true;
-        activitieCheckBox[2].style.color = '#596D75';
-      } else if (e.target.name === 'node'){
-        activitieCheckBox[3].firstElementChild.disabled = true;
-        activitieCheckBox[3].style.color = '#596D75';
-      }
+      checkedAndUnchecked(e.target.name, [4,5,2,3], true, '#596D75');
     } else {
-      // console.log('Unchecked');
-
-
-      for(var i = 1; i < activitieCheckBox.length - 1; i++){
-        // console.log(activitieCheckBox[i].firstElementChild.value);
-        // console.log(activitieCheckBox[i].firstElementChild.checked);
-        if(activitieCheckBox[i].firstElementChild.checked){
-          total += parseInt(activitieCheckBox[i].firstElementChild.value);
-        }
+      if(activitieCheckBox[i].firstElementChild.checked){
+        total += parseInt(activitieCheckBox[i].firstElementChild.value);
       }
-
-      if(e.target.name === 'js-frameworks'){
-        activitieCheckBox[4].firstElementChild.disabled = false;
-        activitieCheckBox[4].style.color = '#000';
-      } else if (e.target.name === 'js-libs'){
-        activitieCheckBox[5].firstElementChild.disabled = false;
-        activitieCheckBox[5].style.color = '#000';
-      } else if (e.target.name === 'express'){
-        activitieCheckBox[2].firstElementChild.disabled = false;
-        activitieCheckBox[2].style.color = '#000';
-      } else if (e.target.name === 'node'){
-        activitieCheckBox[3].firstElementChild.disabled = false;
-        activitieCheckBox[3].style.color = '#000';
-      }
-    //   for(let i = 1; i < activitieCheckBox.length; i++){
-    //     // if(activitieCheckBox[i].firstElementChild){
-    //     //
-    //     // }
-    //   activitieCheckBox[i].firstElementChild.disabled = false;
-    //   activitieCheckBox[i].style.color = '#000';
-    // }
+      checkedAndUnchecked(e.target.name, [4,5,2,3], false, '#000');
   }
+}
 
   activitieCheckBox[8].innerHTML = 'Total: ' + total;
-
-  // console.log(total);
 });
 
 /*-------------------Payment Info Selection------------------*/
-// console.log(payPal);
 payment.value = 'credit card';
-payPal.style.display = 'none';
-bitCoin.style.display = 'none';
+paymentInfo(['', 'none', 'none']);
 
 payment.addEventListener('change', function(e){
   // console.log(this.value);
   if(this.value === 'credit card'){
-    creditCard.style.display = '';
-    payPal.style.display = 'none';
-    bitCoin.style.display = 'none';
-
+    paymentInfo(['', 'none', 'none']);
   } else if(this.value === 'paypal') {
-    creditCard.style.display = 'none';
-    payPal.style.display = '';
-    bitCoin.style.display = 'none';
+    paymentInfo(['none', '', 'none']);
   } else if(this.value === 'bitcoin') {
-    creditCard.style.display = 'none';
-    payPal.style.display = 'none';
-    bitCoin.style.display = '';
+    paymentInfo(['none', 'none', '']);
   } else {
-    creditCard.style.display = 'none';
-    payPal.style.display = 'none';
-    bitCoin.style.display = 'none';
+    paymentInfo(['none', 'none', 'none']);
   }
 });
 
-// console.log(payment.parentNode);
-// console.log(payment.nextSibling.nextSibling);
 
-// console.log(form);
+/*-------------------Form Validation------------------*/
 form.addEventListener('submit', function(e){
   const emailValid = /[\w.]+@\w+\.(net|com|edu|ca)/;
   const numbsOnly = /[^0-9]+/;
   let isChecked = false;
-  // sdittawork@gmail.com
-  // s.dittawork@sympatico.ca
+
   e.preventDefault();
-  // console.log(emailValid.test(emailInput.value.toLowerCase()));
-  // console.log(e.target.lastElementChild);
-    // console.log(nameInput.value === '');
-    // console.log(emailInput.value.length - 1);
-    // console.log(nameInput);
     if(nameInput.value === ''){
-      // console.log(nameInput.previousSibling.previousSibling)
-      nameInput.previousSibling.previousSibling.style.color = 'red';
-      nameInput.style.border = '2px solid red';
+      errorColor(nameInput, 'red', '2px solid red');
+    } else {
+      errorColor(nameInput, '#000', '2px solid #c1deeb');
     }
 
-    // console.log(emailInput.value.indexOf('@') > 1);
-    // console.log(emailInput.value.indexOf('.') <= emailInput.value.indexOf('@'));
-
     if(!emailValid.test(emailInput.value.toLowerCase())){
-      emailInput.previousSibling.previousSibling.style.color = 'red';
-      emailInput.style.border = '2px solid red';
+      errorColor(emailInput, 'red', '2px solid red');
+    } else {
+      errorColor(emailInput, '#000', '2px solid #c1deeb');
     }
 
     if(shirtDesign.value === 'Select Theme'){
-      shirtDesign.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.style.color = 'red';
+      errorColor(shirtDesign.parentNode.previousSibling.previousSibling, 'red', '');
+      // shirtDesign.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.style.color = 'red';
+    } else {
+      errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#000', '');
     }
 
     for (var i = 1; i < activitieCheckBox.length - 1; i++) {
-      // console.log(!activitieCheckBox[i].firstElementChild.checked || activitieCheckBox[i].firstElementChild.checked );
       if(activitieCheckBox[i].firstElementChild.checked){
         isChecked = true;
       }
       if(!isChecked){
-        // alert('more then one checked');
-        activitieCheckBox[0].style.color = 'red';
+        errorColor(activitieCheckBox[0].nextSibling.nextSibling, 'red', '');
         break;
+      } else {
+        errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#000', '');
       }
     }
 
     if(payment.value === 'credit card'){
-      // console.log(numbsOnly.test(cardNumber.value.toLowerCase()));
-      // console.log(cardNumber.value.length);
-      // console.log( cardNumber.value.legnth > 16 && cardNumber.value.length < 13);
-      // console.log(cardNumber.value.length < 13 || cardNumber.value.length > 16 ||cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase()));
-      if(cardNumber.value.length < 13 || cardNumber.value.length > 16 ||cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase())){
-        cardNumber.previousSibling.previousSibling.style.color = 'red';
-        cardNumber.style.border = '2px solid red';
+      if(cardNumber.value.length < 13 || cardNumber.value.length > 16 || cardNumber.value.length === 14 || cardNumber.value.length === 15 || cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase())){
+        errorColor(cardNumber, 'red', '2px solid red');
+      } else {
+        errorColor(cardNumber, '#000', '2px solid #c1deeb');
       }
       if(zipCode.value.length > 5 || zipCode.value.length < 5 || zipCode.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
-        zipCode.previousSibling.previousSibling.style.color = 'red';
-        zipCode.style.border = '2px solid red';
+        errorColor(zipCode, 'red', '2px solid red');
+      } else {
+        errorColor(zipCode, '#000', '2px solid #c1deeb');
       }
       if(cvv.value.length > 3 || cvv.value.length < 3 || cvv.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
-        cvv.previousSibling.previousSibling.style.color = 'red';
-        cvv.style.border = '2px solid red';
+        errorColor(cvv, 'red', '2px solid red');
+      } else {
+        errorColor(cvv, '#000', '2px solid #c1deeb');
       }
     }
-
-//TODO Add a final conditional statement to deturmine if the errors were corrected...
-    // if() {
-    //   nameInput.previousSibling.previousSibling.style.color = '#000';
-    // }
 });
 
 });
