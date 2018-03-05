@@ -21,9 +21,10 @@ const cvv = document.getElementById('cvv');
 const form = document.getElementsByTagName('form')[0];
 
 
-function shirtInfo(firstDesign, condition, i){
+function shirtInfo(firstDesign, condition, i, display){
   // console.log(i);
     shirtColor.value = firstDesign;
+    shirtColor.parentNode.style.display = display;
     if(condition){
       shirtColor.options[i].style.display = '';
     } else {
@@ -54,10 +55,38 @@ function paymentInfo(display){
   bitCoin.style.display = display[2];
 }
 
-function errorColor(input, textColor, borderColor){
+function errorColor(input, textColor, borderColor, error){
+  let errorMsg = input.previousSibling.previousSibling.innerHTML;
   input.previousSibling.previousSibling.style.color = textColor;
   input.style.border = borderColor;
+  // console.log(errorMsg.indexOf(error) === -1);
+  if(textColor === 'red'){
+    if(errorMsg.indexOf(error) === -1){
+      let i = '<span>' + error + '</span>';
+      input.previousSibling.previousSibling.insertAdjacentHTML('beforeend', i);
+      if(input.previousSibling.previousSibling.children.length > 1){
+        input.previousSibling.previousSibling.firstElementChild.remove();
+      }
+    }
+  }else{
+    if(errorMsg.indexOf('(') > -1){
+      input.previousSibling.previousSibling.lastElementChild.remove();
+    }
+  }
 }
+
+// function errorMessage(input){
+//   let cardNumberErr = '<span> Please enter a credit card number</span>'
+//   let cardNumbDigits = '<span> Please enter a number that is between 13 and 16 digits</span>';
+//   if(input.value.length === 0){
+//     // input.previousSibling.previousSibling.lastElementChild.remove();
+//     input.previousSibling.previousSibling.insertAdjacentHTML('beforeend', cardNumberErr);
+//   }
+//   // else if(cardNumber.value.length < 13 || cardNumber.value.length > 16 || cardNumber.value.length === 14 || cardNumber.value.length === 15){
+//   //   input.previousSibling.previousSibling.lastElementChild.remove();
+//   //   input.previousSibling.previousSibling.insertAdjacentHTML('beforeend', cardNumbDigits);
+//   // }
+// }
 
 window.addEventListener("load", function(){
   nameInput.focus(); // After the page loads the name input is focused
@@ -74,24 +103,21 @@ title.addEventListener("change", function(){
 
 /*-------------------Shirt Choise------------------*/
 for(let i = 0; i < shirtColor.children.length; i++){
-  shirtInfo('choosedesign', i < 1, i);
-  // if(i < 1){
-  //   shirtColor.options[i].style.display = '';
-  // } else {
-  //   shirtColor.options[i].style.display = 'none';
-  // }
+  shirtInfo('choosedesign', i < 1, i, 'none');
+  // shirtColor.parentNode.style.display = 'none';
 }
 
 shirtDesign.addEventListener('change', function(e){
   for(let i = 0; i < shirtColor.children.length; i++){
     if(this.value === 'js puns'){
-      shirtInfo('cornflowerblue', i >= 1 && i <= 3, i);
+      shirtInfo('cornflowerblue', i >= 1 && i <= 3, i, '');
     }
      else if(this.value === 'heart js'){
-       shirtInfo('tomato', i > 3, i);
+       shirtInfo('tomato', i > 3, i, '');
     }
     else {
-      shirtInfo('choosedesign', i < 1, i);
+      shirtInfo('choosedesign', i < 1, i, 'none');
+      // shirtColor.parentNode.style.display = 'none';
     }
   }
   });
@@ -143,22 +169,22 @@ form.addEventListener('submit', function(e){
 
   e.preventDefault();
     if(nameInput.value === ''){
-      errorColor(nameInput, 'red', '2px solid red');
+      errorColor(nameInput, '#d60505', '2px solid #d60505', ' (Provide Your Name)');
     } else {
-      errorColor(nameInput, '#000', '2px solid #c1deeb');
+      errorColor(nameInput, '#000', '2px solid #c1deeb', '');
     }
 
     if(!emailValid.test(emailInput.value.toLowerCase())){
-      errorColor(emailInput, 'red', '2px solid red');
+      errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Provide Your Email)');
     } else {
-      errorColor(emailInput, '#000', '2px solid #c1deeb');
+      errorColor(emailInput, '#000', '2px solid #c1deeb', '');
     }
 
     if(shirtDesign.value === 'Select Theme'){
-      errorColor(shirtDesign.parentNode.previousSibling.previousSibling, 'red', '');
+      errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#d60505', '', ' (Pick a Shirt)');
       // shirtDesign.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.style.color = 'red';
     } else {
-      errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#000', '');
+      errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#000', '', '');
     }
 
     for (var i = 1; i < activitieCheckBox.length - 1; i++) {
@@ -166,28 +192,31 @@ form.addEventListener('submit', function(e){
         isChecked = true;
       }
       if(!isChecked){
-        errorColor(activitieCheckBox[0].nextSibling.nextSibling, 'red', '');
+        errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#d60505', '', ' (Select an Activity)');
         break;
       } else {
-        errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#000', '');
+        errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#000', '', '');
       }
     }
 
     if(payment.value === 'credit card'){
-      if(cardNumber.value.length < 13 || cardNumber.value.length > 16 || cardNumber.value.length === 14 || cardNumber.value.length === 15 || cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase())){
-        errorColor(cardNumber, 'red', '2px solid red');
-      } else {
-        errorColor(cardNumber, '#000', '2px solid #c1deeb');
+      // if(){
+        if(cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase())){
+          errorColor(cardNumber, '#d60505', '2px solid #d60505', ' (Please enter a credit card number)');
+        } else if(cardNumber.value.length < 13 || cardNumber.value.length > 16 || cardNumber.value.length === 14 || cardNumber.value.length === 15 || numbsOnly.test(cardNumber.value.toLowerCase())){
+          errorColor(cardNumber, '#d60505', '2px solid #d60505', ' (Please enter a number that is between 13 and 16 digits long)');
+        } else {
+        errorColor(cardNumber, '#000', '2px solid #c1deeb', '');
       }
       if(zipCode.value.length > 5 || zipCode.value.length < 5 || zipCode.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
-        errorColor(zipCode, 'red', '2px solid red');
+        errorColor(zipCode, '#d60505', '2px solid #d60505', ' (Zip Code has to be 5 digits)');
       } else {
-        errorColor(zipCode, '#000', '2px solid #c1deeb');
+        errorColor(zipCode, '#000', '2px solid #c1deeb', '');
       }
       if(cvv.value.length > 3 || cvv.value.length < 3 || cvv.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
-        errorColor(cvv, 'red', '2px solid red');
+        errorColor(cvv, '#d60505', '2px solid #d60505', ' (CVV has to be 3 digits)');
       } else {
-        errorColor(cvv, '#000', '2px solid #c1deeb');
+        errorColor(cvv, '#000', '2px solid #c1deeb', '');
       }
     }
 });
