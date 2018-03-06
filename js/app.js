@@ -60,7 +60,7 @@ function errorColor(input, textColor, borderColor, error){
   input.previousSibling.previousSibling.style.color = textColor;
   input.style.border = borderColor;
   // console.log(errorMsg.indexOf(error) === -1);
-  if(textColor === 'red'){
+  if(textColor === '#d60505'){
     if(errorMsg.indexOf(error) === -1){
       let i = '<span>' + error + '</span>';
       input.previousSibling.previousSibling.insertAdjacentHTML('beforeend', i);
@@ -93,19 +93,19 @@ window.addEventListener("load", function(){
 
 /*-------------------Other Choise------------------*/
   otherOption.style.display = 'none';
-title.addEventListener("change", function(){
-  if(title.value === 'other'){
-    otherOption.style.display = '';
-  } else {
-    otherOption.style.display = 'none';
-  }
-});
+  title.addEventListener("change", function(){
+    if(title.value === 'other'){
+      otherOption.style.display = '';
+    } else {
+      otherOption.style.display = 'none';
+    }
+  });
 
 /*-------------------Shirt Choise------------------*/
-for(let i = 0; i < shirtColor.children.length; i++){
-  shirtInfo('choosedesign', i < 1, i, 'none');
-  // shirtColor.parentNode.style.display = 'none';
-}
+  for(let i = 0; i < shirtColor.children.length; i++){
+    shirtInfo('choosedesign', i < 1, i, 'none');
+    // shirtColor.parentNode.style.display = 'none';
+  }
 
 shirtDesign.addEventListener('change', function(e){
   for(let i = 0; i < shirtColor.children.length; i++){
@@ -123,102 +123,111 @@ shirtDesign.addEventListener('change', function(e){
   });
 
 /*-------------------Registration For Activities------------------*/
-activities.addEventListener('change', function(e){
-  let total = 0;
+  activities.addEventListener('change', function(e){
+    let total = 0;
 
-for(var i = 1; i < activitieCheckBox.length - 1; i++){
-    if(e.target.checked){
-      if(activitieCheckBox[i].firstElementChild.checked){
-        total += parseInt(activitieCheckBox[i].firstElementChild.value);
-      }
-      checkedAndUnchecked(e.target.name, [4,5,2,3], true, '#596D75');
-    } else {
-      if(activitieCheckBox[i].firstElementChild.checked){
-        total += parseInt(activitieCheckBox[i].firstElementChild.value);
-      }
-      checkedAndUnchecked(e.target.name, [4,5,2,3], false, '#000');
+  for(var i = 1; i < activitieCheckBox.length - 1; i++){
+      if(e.target.checked){
+        if(activitieCheckBox[i].firstElementChild.checked){
+          total += parseInt(activitieCheckBox[i].firstElementChild.value);
+        }
+        checkedAndUnchecked(e.target.name, [4,5,2,3], true, '#596D75');
+      } else {
+        if(activitieCheckBox[i].firstElementChild.checked){
+          total += parseInt(activitieCheckBox[i].firstElementChild.value);
+        }
+        checkedAndUnchecked(e.target.name, [4,5,2,3], false, '#000');
+    }
   }
-}
 
-  activitieCheckBox[8].innerHTML = 'Total: ' + total;
-});
+    activitieCheckBox[8].innerHTML = 'Total: ' + total;
+  });
 
 /*-------------------Payment Info Selection------------------*/
-payment.value = 'credit card';
-paymentInfo(['', 'none', 'none']);
+  payment.value = 'credit card';
+  paymentInfo(['', 'none', 'none']);
 
-payment.addEventListener('change', function(e){
-  // console.log(this.value);
-  if(this.value === 'credit card'){
-    paymentInfo(['', 'none', 'none']);
-  } else if(this.value === 'paypal') {
-    paymentInfo(['none', '', 'none']);
-  } else if(this.value === 'bitcoin') {
-    paymentInfo(['none', 'none', '']);
-  } else {
-    paymentInfo(['none', 'none', 'none']);
-  }
-});
+  payment.addEventListener('change', function(e){
+    // console.log(this.value);
+    if(this.value === 'credit card'){
+      paymentInfo(['', 'none', 'none']);
+    } else if(this.value === 'paypal') {
+      paymentInfo(['none', '', 'none']);
+    } else if(this.value === 'bitcoin') {
+      paymentInfo(['none', 'none', '']);
+    } else {
+      paymentInfo(['none', 'none', 'none']);
+    }
+  });
 
 
 /*-------------------Form Validation------------------*/
-form.addEventListener('submit', function(e){
   const emailValid = /[\w.]+@\w+\.(net|com|edu|ca)/;
-  const numbsOnly = /[^0-9]+/;
-  let isChecked = false;
+  form.addEventListener('submit', function(e){
+    const numbsOnly = /[^0-9]+/;
+    let isChecked = false;
 
-  e.preventDefault();
-    if(nameInput.value === ''){
-      errorColor(nameInput, '#d60505', '2px solid #d60505', ' (Provide Your Name)');
-    } else {
-      errorColor(nameInput, '#000', '2px solid #c1deeb', '');
-    }
+    e.preventDefault();
+      if(nameInput.value === ''){
+        errorColor(nameInput, '#d60505', '2px solid #d60505', ' (Provide Your Name)');
+      } else {
+        errorColor(nameInput, '#000', '2px solid #c1deeb', '');
+      }
 
-    if(!emailValid.test(emailInput.value.toLowerCase())){
+      if(!emailValid.test(emailInput.value.toLowerCase())){
+        errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Provide Your Email)');
+      } else {
+        errorColor(emailInput, '#000', '2px solid #c1deeb', '');
+      }
+
+      if(shirtDesign.value === 'Select Theme'){
+        errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#d60505', '', ' (Pick a Shirt)');
+        // shirtDesign.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.style.color = 'red';
+      } else {
+        errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#000', '', '');
+      }
+
+      for (var i = 1; i < activitieCheckBox.length - 1; i++) {
+        if(activitieCheckBox[i].firstElementChild.checked){
+          isChecked = true;
+        }
+        if(!isChecked){
+          errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#d60505', '', ' (Select an Activity)');
+          break;
+        } else {
+          errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#000', '', '');
+        }
+      }
+
+      if(payment.value === 'credit card'){
+        if(cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase())){
+            errorColor(cardNumber, '#d60505', '2px solid #d60505', ' (Please enter a credit card number)');
+        } else if(cardNumber.value.length < 13 || cardNumber.value.length > 16 || cardNumber.value.length === 14 || cardNumber.value.length === 15 || numbsOnly.test(cardNumber.value.toLowerCase())){
+            errorColor(cardNumber, '#d60505', '2px solid #d60505', ' (Please enter a number that is between 13 and 16 digits long)');
+        } else {
+            errorColor(cardNumber, '#000', '2px solid #c1deeb', '');
+        }
+        if(zipCode.value.length > 5 || zipCode.value.length < 5 || zipCode.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
+          errorColor(zipCode, '#d60505', '2px solid #d60505', ' (Zip Code has to be 5 digits)');
+        } else {
+          errorColor(zipCode, '#000', '2px solid #c1deeb', '');
+        }
+        if(cvv.value.length > 3 || cvv.value.length < 3 || cvv.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
+          errorColor(cvv, '#d60505', '2px solid #d60505', ' (CVV has to be 3 digits)');
+        } else {
+          errorColor(cvv, '#000', '2px solid #c1deeb', '');
+        }
+      }
+  });
+
+  form.addEventListener('input', function(){
+    // console.log(emailInput.value.indexOf('.') === -1);
+    if(emailInput.value.indexOf('@') === -1){
+        errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Please Provide a @ symbol)');
+    } else if(!emailValid.test(emailInput.value.toLowerCase())){
       errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Provide Your Email)');
     } else {
       errorColor(emailInput, '#000', '2px solid #c1deeb', '');
     }
-
-    if(shirtDesign.value === 'Select Theme'){
-      errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#d60505', '', ' (Pick a Shirt)');
-      // shirtDesign.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.style.color = 'red';
-    } else {
-      errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#000', '', '');
-    }
-
-    for (var i = 1; i < activitieCheckBox.length - 1; i++) {
-      if(activitieCheckBox[i].firstElementChild.checked){
-        isChecked = true;
-      }
-      if(!isChecked){
-        errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#d60505', '', ' (Select an Activity)');
-        break;
-      } else {
-        errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#000', '', '');
-      }
-    }
-
-    if(payment.value === 'credit card'){
-      // if(){
-        if(cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase())){
-          errorColor(cardNumber, '#d60505', '2px solid #d60505', ' (Please enter a credit card number)');
-        } else if(cardNumber.value.length < 13 || cardNumber.value.length > 16 || cardNumber.value.length === 14 || cardNumber.value.length === 15 || numbsOnly.test(cardNumber.value.toLowerCase())){
-          errorColor(cardNumber, '#d60505', '2px solid #d60505', ' (Please enter a number that is between 13 and 16 digits long)');
-        } else {
-        errorColor(cardNumber, '#000', '2px solid #c1deeb', '');
-      }
-      if(zipCode.value.length > 5 || zipCode.value.length < 5 || zipCode.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
-        errorColor(zipCode, '#d60505', '2px solid #d60505', ' (Zip Code has to be 5 digits)');
-      } else {
-        errorColor(zipCode, '#000', '2px solid #c1deeb', '');
-      }
-      if(cvv.value.length > 3 || cvv.value.length < 3 || cvv.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
-        errorColor(cvv, '#d60505', '2px solid #d60505', ' (CVV has to be 3 digits)');
-      } else {
-        errorColor(cvv, '#000', '2px solid #c1deeb', '');
-      }
-    }
-});
-
+  });
 });
