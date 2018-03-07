@@ -20,11 +20,13 @@ const cvv = document.getElementById('cvv');
 
 const form = document.getElementsByTagName('form')[0];
 
-
+//A named function that takes 4 arguments value, the conditon itself the var i from the for loop and the display property
 function shirtInfo(firstDesign, condition, i, display){
-  // console.log(i);
+  //This sets the value at the start
     shirtColor.value = firstDesign;
+    //This sets the display property of the color-js-puns div to either show or hide
     shirtColor.parentNode.style.display = display;
+    //If the condition in the argument show the shirt colors according to the design
     if(condition){
       shirtColor.options[i].style.display = '';
     } else {
@@ -32,8 +34,10 @@ function shirtInfo(firstDesign, condition, i, display){
     }
 }
 
+//A named function that takes 4 argumentsselectionName, checkboxNumber, disabled, textColor
 function checkedAndUnchecked(selectionName, checkboxNumber, disabled, textColor){
-  // console.log(disabled);
+  //if the selectionName which is e.target.name is js-framework disable the the checkbox that has a time that conflics with it
+  //as well as changing the color of the text when it is disabled. Else if the other ones are selected they will disable the checkbox accordingly.
   if(selectionName === 'js-frameworks'){
     activitieCheckBox[checkboxNumber[0]].firstElementChild.disabled = disabled;
     activitieCheckBox[checkboxNumber[0]].style.color = textColor;
@@ -49,45 +53,43 @@ function checkedAndUnchecked(selectionName, checkboxNumber, disabled, textColor)
   }
 }
 
+//A named function that takes one argument as an array that holds the various displays
 function paymentInfo(display){
+  //depending on the array inside the argument it will show one and and hide the rest
   creditCard.style.display = display[0];
   payPal.style.display = display[1];
   bitCoin.style.display = display[2];
 }
 
+//A named function that takes 4 argument input, textColor, borderColor, error
 function errorColor(input, textColor, borderColor, error){
+  //this var errorMsg holds the input for each of the inputs in the page
   let errorMsg = input.previousSibling.previousSibling.innerHTML;
+  //This sets the color of the text above the input to change to red if the input is not filled
   input.previousSibling.previousSibling.style.color = textColor;
+  //This chanes the border color to red if the input is not filled
   input.style.border = borderColor;
-  // console.log(errorMsg.indexOf(error) === -1);
+//if the color is red
   if(textColor === '#d60505'){
+    //if the innerHTML has the string of the argument error more then once or equals -1.
     if(errorMsg.indexOf(error) === -1){
-      let i = '<span>' + error + '</span>';
-      input.previousSibling.previousSibling.insertAdjacentHTML('beforeend', i);
+      //a var called span which stores a span with the specific error string inside
+      let span = '<span>' + error + '</span>';
+      //the span string is then added inside the legends name
+      input.previousSibling.previousSibling.insertAdjacentHTML('beforeend', span);
+      //if the children of the legends text the error messages have a lenght greater than 1 remove it
       if(input.previousSibling.previousSibling.children.length > 1){
         input.previousSibling.previousSibling.firstElementChild.remove();
       }
     }
-  }else{
+  }else{ // else if its not red
+    // if the errorMsg has a bracket and its greated then -1 run the code inside remove it
     if(errorMsg.indexOf('(') > -1){
       input.previousSibling.previousSibling.lastElementChild.remove();
     }
   }
 }
-
-// function errorMessage(input){
-//   let cardNumberErr = '<span> Please enter a credit card number</span>'
-//   let cardNumbDigits = '<span> Please enter a number that is between 13 and 16 digits</span>';
-//   if(input.value.length === 0){
-//     // input.previousSibling.previousSibling.lastElementChild.remove();
-//     input.previousSibling.previousSibling.insertAdjacentHTML('beforeend', cardNumberErr);
-//   }
-//   // else if(cardNumber.value.length < 13 || cardNumber.value.length > 16 || cardNumber.value.length === 14 || cardNumber.value.length === 15){
-//   //   input.previousSibling.previousSibling.lastElementChild.remove();
-//   //   input.previousSibling.previousSibling.insertAdjacentHTML('beforeend', cardNumbDigits);
-//   // }
-// }
-
+//a addEventListener that when the window(whole page) loads it runs whatever is inside the function
 window.addEventListener("load", function(){
   nameInput.focus(); // After the page loads the name input is focused
 
@@ -102,13 +104,16 @@ window.addEventListener("load", function(){
   });
 
 /*-------------------Shirt Choise------------------*/
+//When the page loads loop through the children of shirtColor and with the information in the argument
+//display it
   for(let i = 0; i < shirtColor.children.length; i++){
     shirtInfo('choosedesign', i < 1, i, 'none');
-    // shirtColor.parentNode.style.display = 'none';
   }
-
+//When the addEventListener of the shirtDesign selection is changed it runs through this function
 shirtDesign.addEventListener('change', function(e){
+  //A for loop that loops through the children of shirtColor
   for(let i = 0; i < shirtColor.children.length; i++){
+    // if the tag it was changed to has the value of js puns run the custom shirtInfo function else it chooses between the other two
     if(this.value === 'js puns'){
       shirtInfo('cornflowerblue', i >= 1 && i <= 3, i, '');
     }
@@ -117,38 +122,45 @@ shirtDesign.addEventListener('change', function(e){
     }
     else {
       shirtInfo('choosedesign', i < 1, i, 'none');
-      // shirtColor.parentNode.style.display = 'none';
     }
   }
   });
 
 /*-------------------Registration For Activities------------------*/
+//When the addEventListener of the activities fieldset is changed it runs through this function
   activities.addEventListener('change', function(e){
+    // a var called total which stores the value of 0
     let total = 0;
-
+    //a for loop that loops through the activitieCheckBox var (the children) and ignores the legend tag as well as the h3 tag
   for(var i = 1; i < activitieCheckBox.length - 1; i++){
+    //if the targeted checkbox is checked run the code inside
       if(e.target.checked){
+        //if as many of the inputs are checked add the value of the checkbox (parseInt changes the string value to a interger) and add it to the total
         if(activitieCheckBox[i].firstElementChild.checked){
           total += parseInt(activitieCheckBox[i].firstElementChild.value);
         }
+        //runs the function checkedAndUnchecked which disables the chackbox based on conflicting times
         checkedAndUnchecked(e.target.name, [4,5,2,3], true, '#596D75');
       } else {
+        //else if it is unchecked take that number away from the total and run the function checkedAndUnchecked
         if(activitieCheckBox[i].firstElementChild.checked){
           total += parseInt(activitieCheckBox[i].firstElementChild.value);
         }
         checkedAndUnchecked(e.target.name, [4,5,2,3], false, '#000');
     }
   }
-
+    //This add the total to the page
     activitieCheckBox[8].innerHTML = 'Total: ' + total;
   });
 
 /*-------------------Payment Info Selection------------------*/
+//when the page is first loaded the value of the payment select tag is creditcard
   payment.value = 'credit card';
+  //and runs the fun function paymentInfo showing the credit card information and hiding the other two
   paymentInfo(['', 'none', 'none']);
-
+//When the addEventListener of the payment select is changed it runs through this function
   payment.addEventListener('change', function(e){
-    // console.log(this.value);
+    //if the target value is the same as the value credit card run the code inside else run the other codes depending on if they were selected
     if(this.value === 'credit card'){
       paymentInfo(['', 'none', 'none']);
     } else if(this.value === 'paypal') {
@@ -162,43 +174,48 @@ shirtDesign.addEventListener('change', function(e){
 
 
 /*-------------------Form Validation------------------*/
+//A var holding a regular expression for email varification
   const emailValid = /[\w.]+@\w+\.(net|com|edu|ca)/;
+  //When the addEventListener of the form is submitted it runs through this function
   form.addEventListener('submit', function(e){
-    const numbsOnly = /[^0-9]+/;
-    let isChecked = false;
+    const numbsOnly = /[^0-9]+/; // regular expression for having numbers only
+    let isChecked = false; // a var called isChecked used to verify if a checkbox has been clicked
 
-    e.preventDefault();
+    e.preventDefault(); // this makes it so when the button or enter is pressed it dosn't reload the page
+      //if the nameInput value is nothing run the function errorColor
       if(nameInput.value === ''){
         errorColor(nameInput, '#d60505', '2px solid #d60505', ' (Provide Your Name)');
       } else {
         errorColor(nameInput, '#000', '2px solid #c1deeb', '');
       }
-
+      //if the email does not compleat the regular expression rules it runs the function errorColor changing the color and adding error text else it goes back to noraml
       if(!emailValid.test(emailInput.value.toLowerCase())){
         errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Provide Your Email)');
       } else {
         errorColor(emailInput, '#000', '2px solid #c1deeb', '');
       }
-
+      //if the shirtDesign value is equal to Select Theme it will run the errorColor function
       if(shirtDesign.value === 'Select Theme'){
         errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#d60505', '', ' (Pick a Shirt)');
         // shirtDesign.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.style.color = 'red';
       } else {
-        errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#000', '', '');
+        errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#184f68', '', '');
       }
-
+      //loop through activitieCheckBox
       for (var i = 1; i < activitieCheckBox.length - 1; i++) {
+        //if one or more of the checkboxes for register activities are checked
         if(activitieCheckBox[i].firstElementChild.checked){
-          isChecked = true;
+          isChecked = true;// the isChecked var is changed to true
         }
+        //if isChecked is not true run the function errorColor changing it to red else run the function changing it back to the regular color
         if(!isChecked){
           errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#d60505', '', ' (Select an Activity)');
           break;
         } else {
-          errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#000', '', '');
+          errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#184f68', '', '');
         }
       }
-
+      //if the payment value is equal to credit card this runs a few conditional statements that determine wether or not the credit card information should shoot an error or return in a true manner
       if(payment.value === 'credit card'){
         if(cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase())){
             errorColor(cardNumber, '#d60505', '2px solid #d60505', ' (Please enter a credit card number)');
@@ -219,14 +236,14 @@ shirtDesign.addEventListener('change', function(e){
         }
       }
   });
-
-  form.addEventListener('input', function(){
-    // console.log(emailInput.value.indexOf('.') === -1);
+  //This emailInput has an addEventListener of input which can change the input value of the email in real-time
+  emailInput.addEventListener('input', function(){
+    //if the email dosnt have an @ symbole or the index of the emailInput value is equal to -1 run the function errorColor inside
     if(emailInput.value.indexOf('@') === -1){
         errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Please Provide a @ symbol)');
-    } else if(!emailValid.test(emailInput.value.toLowerCase())){
+    } else if(!emailValid.test(emailInput.value.toLowerCase())){ // else if dons't follow the regular expression rule run the next function errorCode
       errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Provide Your Email)');
-    } else {
+    } else {//finally if there is nothing else return the text and border of input to the normal color 
       errorColor(emailInput, '#000', '2px solid #c1deeb', '');
     }
   });
