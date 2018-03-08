@@ -94,6 +94,7 @@ window.addEventListener("load", function(){
   nameInput.focus(); // After the page loads the name input is focused
 
 /*-------------------Other Choise------------------*/
+//If the other option in the job role is selected it will display thsi text input to enter the other job role
   otherOption.style.display = 'none';
   title.addEventListener("change", function(){
     if(title.value === 'other'){
@@ -243,7 +244,7 @@ shirtDesign.addEventListener('change', function(e){
         errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Please Provide a @ symbol)');
     } else if(!emailValid.test(emailInput.value.toLowerCase())){ // else if dons't follow the regular expression rule run the next function errorCode
       errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Provide Your Email)');
-    } else {//finally if there is nothing else return the text and border of input to the normal color 
+    } else {//finally if there is nothing else return the text and border of input to the normal color
       errorColor(emailInput, '#000', '2px solid #c1deeb', '');
     }
   });
