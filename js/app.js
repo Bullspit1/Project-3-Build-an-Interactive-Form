@@ -181,96 +181,78 @@ shirtDesign.addEventListener('change', function(e){
   form.addEventListener('submit', function(e){
     const numbsOnly = /[^0-9]+/; // regular expression for having numbers only
     let isChecked = false; // a var called isChecked used to verify if a checkbox has been clicked
-    let submit = false;
+    let count = 0;
       //if the nameInput value is nothing run the function errorColor
       if(nameInput.value === ''){
         errorColor(nameInput, '#d60505', '2px solid #d60505', ' (Provide Your Name)');
-        submit = false
+        e.preventDefault();
       } else {
-        submit = true;
         errorColor(nameInput, '#000', '2px solid #c1deeb', '');
       }
       //if the email does not compleat the regular expression rules it runs the function errorColor changing the color and adding error text else it goes back to noraml
       if(!emailValid.test(emailInput.value.toLowerCase())){
-        submit = false
+        e.preventDefault();
         errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Provide Your Email)');
       } else {
-        submit = true;
         errorColor(emailInput, '#000', '2px solid #c1deeb', '');
       }
       //if the shirtDesign value is equal to Select Theme it will run the errorColor function
       if(shirtDesign.value === 'Select Theme'){
-        submit = false;
         errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#d60505', '', ' (Pick a Shirt)');
-        // shirtDesign.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.style.color = 'red';
+        e.preventDefault();
       } else {
-        submit = true;
         errorColor(shirtDesign.parentNode.previousSibling.previousSibling, '#184f68', '', '');
       }
-      //loop through activitieCheckBox
-      for (var i = 1; i < activitieCheckBox.length - 1; i++) {
-        //if one or more of the checkboxes for register activities are checked
-        if(activitieCheckBox[i].firstElementChild.checked){
-          isChecked = true;// the isChecked var is changed to true
-        }
-        //if isChecked is not true run the function errorColor changing it to red else run the function changing it back to the regular color
-        if(!isChecked){
-          submit = false;
-          errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#d60505', '', ' (Select an Activity)');
-        } else {
-          submit = true;
+      //If more then one checkbox is checked run the errorColor function showing no error else show an error and prevent the page from submitting.
+        if(document.querySelectorAll('input[type="checkbox"]:checked').length >= 1){
           errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#184f68', '', '');
+        } else {
+          errorColor(activitieCheckBox[0].nextSibling.nextSibling, '#d60505', '', ' (Select an Activity)');
+          e.preventDefault();
         }
-      }
       //if the payment value is equal to credit card this runs a few conditional statements that determine wether or not the credit card information should shoot an error or return in a true manner
       if(payment.value === 'credit card'){
         if(cardNumber.value.length === 0 || numbsOnly.test(cardNumber.value.toLowerCase())){
-          submit = false;
             errorColor(cardNumber, '#d60505', '2px solid #d60505', ' (Please enter a credit card number)');
-        } else if(cardNumber.value.length < 13 || cardNumber.value.length > 16 || cardNumber.value.length === 14 || cardNumber.value.length === 15 || numbsOnly.test(cardNumber.value.toLowerCase())){
-            submit = false;
+            e.preventDefault();
+        }
+        if(cardNumber.value.length < 13 || cardNumber.value.length > 16 || cardNumber.value.length === 14 || cardNumber.value.length === 15 || numbsOnly.test(cardNumber.value.toLowerCase())){
             errorColor(cardNumber, '#d60505', '2px solid #d60505', ' (Please enter a number that is between 13 and 16 digits long)');
+            e.preventDefault();
         } else {
-            submit = true;
             errorColor(cardNumber, '#000', '2px solid #c1deeb', '');
         }
         if(zipCode.value.length > 5 || zipCode.value.length < 5 || zipCode.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
           errorColor(zipCode, '#d60505', '2px solid #d60505', ' (Zip Code has to be 5 digits)');
-          submit = false;
+          e.preventDefault();
         } else {
           errorColor(zipCode, '#000', '2px solid #c1deeb', '');
-          submit = true;
         }
         if(cvv.value.length > 3 || cvv.value.length < 3 || cvv.value.length === 0 || numbsOnly.test(zipCode.value.toLowerCase())){
           errorColor(cvv, '#d60505', '2px solid #d60505', ' (CVV has to be 3 digits)');
-          submit = false;
+          e.preventDefault();
         } else {
           errorColor(cvv, '#000', '2px solid #c1deeb', '');
-          submit = true;
         }
       }
-      //A statement that prevents the page from submitting until everything is true
-      if(submit === false){
-        e.preventDefault(); // this makes it so when the button or enter is pressed it dosn't reload the page
+      if (payment.value === 'paypal'){
+
+      }
+      if (payment.value === 'bitcoin') {
+
       }
   });
   //This emailInput has an addEventListener of input which can change the input value of the email in real-time
   emailInput.addEventListener('input', function(e){
-    let submit = false;
     //if the email dosnt have an @ symbole or the index of the emailInput value is equal to -1 run the function errorColor inside
     if(emailInput.value.indexOf('@') === -1){
-      submit = false;
       errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Please Provide a @ symbol)');
-    } else if(!emailValid.test(emailInput.value.toLowerCase())){ // else if dons't follow the regular expression rule run the next function errorCode
-      submit = false;
-      errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Provide Your Email)');
-    } else {//finally if there is nothing else return the text and border of input to the normal color
-      submit = true;
-      errorColor(emailInput, '#000', '2px solid #c1deeb', '');
-    }
-    //A statement that prevents the page from submitting until everything is true
-    if(submit === false){
       e.preventDefault();
+    } else if(!emailValid.test(emailInput.value.toLowerCase())){ // else if dons't follow the regular expression rule run the next function errorCode
+      errorColor(emailInput, '#d60505', '2px solid #d60505', ' (Provide Your Email)');
+      e.preventDefault();
+    } else {//finally if there is nothing else return the text and border of input to the normal color
+      errorColor(emailInput, '#000', '2px solid #c1deeb', '');
     }
   });
 });
